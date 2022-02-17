@@ -1,6 +1,6 @@
 {
   "name": "dbotlinkgen",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Generate an invite link to your Discord bot directly on your code.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
