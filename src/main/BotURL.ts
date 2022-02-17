@@ -9,7 +9,9 @@ export type ScopeKeys = keyof (typeof Scopes);
 
 export class BotURL {
     private readonly url!: string;
-    private client_id: string | null = null;
+    public clientId: string | null = null;
+    public guildId: string | null = null;
+    public disabledSelect = false;
     public permissions: number = 0;
     public scope: string[] | string = [];
 
@@ -20,11 +22,23 @@ export class BotURL {
 
     /**
      * Sets the id of the client
-     * @param {string} clientId [id] of client
+     * @param {string} clientId id of the client
      * @returns {BotURL}
      */
     setClient(clientId: string): BotURL {
-        this.client_id = clientId;
+        this.clientId = clientId;
+
+        return this;
+    };
+
+    /**
+     * Sets the guildId for preselected in the dialog 
+     * only if the user has permission.
+     * @param {string} guildId id of the guild
+     * @returns {BotURL}
+     */
+    setGuild (guildId: string): BotURL {
+        this.guildId = guildId;
 
         return this;
     };
@@ -62,7 +76,7 @@ export class BotURL {
         if (typeof (perm) !== "string") throw new TypeError("Permission key must be a string.");
 
         if (PermissionInteger[perm]) {
-            if (this.has(perm)) throw new TypeError(`Permission (${perm}) is already added - Don't repeat it!`);
+            if (this.hasPermission(perm)) throw new TypeError(`Permission (${perm}) is already added - Don't repeat it!`);
             this.permissions += (PermissionInteger[perm]) as number;
 
             return this;
@@ -79,7 +93,7 @@ export class BotURL {
 
         for (let i = 0; i < perm.length; i++) {
             if (PermissionInteger[perm[i]]) {
-                if (this.has(perm[i])) throw new TypeError(`Permission (${perm[i]}) is already added - Don't repeat it!`);
+                if (this.hasPermission(perm[i])) throw new TypeError(`Permission (${perm[i]}) is already added - Don't repeat it!`);
 
                 this.permissions += (PermissionInteger[perm[i]]) as number;
             };
@@ -93,7 +107,7 @@ export class BotURL {
      * @param {PermissionKeys} perm Key permission to check
      * @returns {boolean}
      */
-    has (perm: PermissionKeys): boolean {
+    hasPermission (perm: PermissionKeys): boolean {
 
         if (typeof (perm) === "string") {
             if (!PermissionInteger[perm]) throw new TypeError("Permission key is not valid.");
@@ -104,18 +118,38 @@ export class BotURL {
     };
 
     /**
+     * Disallow the user from picking a different guild.
+     * @param {boolean} option [boolean] true for disabled
+     */
+    disableSelect (option: boolean): BotURL {
+        if (typeof (option) === "boolean") {
+            this.disabledSelect = option;
+    
+            return this;
+        } else throw new TypeError("The disableOption parameter must be a boolean.");
+    };
+
+    /**
      * Creates the invite link of the client
      * @returns {string}
      */
     create (): string {
         var url = this.url;
 
-        if (this.client_id) {
-            url += "?client_id=" + this.client_id;
-        } else throw new TypeError("Client must not be undefined");
+        if (this.clientId) {
+            url += "?client_id=" + this.clientId;
+        } else throw new TypeError("Client id must not be undefined");
 
         if (typeof (this.permissions) === "number" || this.permissions !== 0) {
             url += "&permissions=" + this.permissions;
+        };
+
+        if (this.guildId) {
+            url += "&guild_id=" + this.guildId
+        };
+
+        if (this.disabledSelect === true) {
+            url += "&disable_guild_select=" + this.disabledSelect;
         };
 
         if (this.scope && this.scope.length) {
