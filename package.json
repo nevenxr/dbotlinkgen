@@ -1,0 +1,26 @@
+{
+  "name": "dbotlinkgen",
+  "version": "1.0.0",
+  "description": "Generate an invite link to your Discord bot directly on your code.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "discord",
+    "discordapp",
+    "discordpermission",
+    "linkgenerator",
+    "dbotlinkgen"
+  ],
+  "repository": "https://github.com/nevenxr/dbotlinkgen",
+  "bugs": "https://github.com/nevenxr/dbotlinkgen/issues",
+  "readme": "https://github.com/nevenxr/dbotlinkgen/blob/main/README.md",
+  "author": "Neven",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.5.5"
+  }
+}
