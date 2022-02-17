@@ -1,0 +1,43 @@
+# Bot Link Generator
+> Generate an invite link to your Discord bot directly on your code.
+
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![NPM](https://img.shields.io/badge/NPM-%23000000.svg?style=for-the-badge&logo=npm&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+
+<br>
+
+## Installation
+```bash
+# NPM
+$ npm install dbotlinkgen
+
+# Yarn
+$ yarn add dbotlinkgen
+```
+
+<br>
+
+## Usage
+```js
+// import { BotURL } from "dbotlinkgen";
+const { BotURL } = require("dbotlinkgen");
+
+const url = new BotURL()
+    .setClient("942780735876628581")
+    // .setScopes("bot") - Add "single" scope
+    .setScopes(["bot", "applicationsCommands"]) // Add "multiple" scopes
+    // .addPermission("VIEW_CHANNEL") - Add permission one by one
+    .addPermissions(["VIEW_CHANNEL", "SEND_MESSAGES"]); // Add multiple permissions
+
+    if (!url.has("MANAGE_GUILD")) {
+        url.addPermission("MANAGE_GUILD");
+    }; // You can check and add permission as well
+
+console.log(url.create()); // Create the url by using ".create()" method
+```
+
+<br>
+
+## License
+[MIT](LICENSE)
